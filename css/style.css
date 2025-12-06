@@ -1,9 +1,9 @@
 
 :root {
-    --primary: #FF6B00;
+    --primary:  #DA1E28;
     --secondary: #5F656F;
     --light: #F5F5F5;
-    --dark: #02245B;
+    --dark: #FFB800;
 }
 
 .back-to-top {
@@ -12,6 +12,13 @@
     right: 30px;
     bottom: 30px;
     z-index: 99;
+}
+
+.bg-dark{
+    background-color: var(--dark) !important;
+}
+.text-dark{
+    color: var(--secondary) !important;
 }
 
 h1,
@@ -265,7 +272,7 @@ a {
 }
 
 .facts .border {
-    border-color: rgba(255, 255, 255, .1) !important;
+    border-color: rgba(0, 0, 0, .5) !important;
 }
 
 
@@ -680,7 +687,7 @@ a {
 
 /*** Footer ***/
 .footer {
-    color: #B0B9AE;
+    color: var(--primary);
 }
 
 .footer .btn.btn-link {
@@ -688,10 +695,11 @@ a {
     margin-bottom: 5px;
     padding: 0;
     text-align: left;
-    color: #B0B9AE;
+    color: var(--primary);
     font-weight: normal;
     text-transform: capitalize;
     transition: .3s;
+    font-weight: 700;
 }
 
 .footer .btn.btn-link::before {
@@ -709,6 +717,9 @@ a {
 }
 
 .copyright {
-    color: #B0B9AE;
-    border-top: 1px solid rgba(255, 255, 255, .1);
+    color: var(--light);
+    border-top: 1px solid rgba(0, 0, 0, .4);
+}
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6{
+    color: var(--dark);
 }
