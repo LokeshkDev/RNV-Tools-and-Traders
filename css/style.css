@@ -450,3 +450,10 @@ text-start {
     background: var(--primary);
     transform: skew(40deg);
 }
+
+@media (min-width: 992px) {
+    .navbar .nav-item.dropdown:hover > .dropdown-menu {
+        display: block !important;
+        margin-top: 0;
+    }
+}
