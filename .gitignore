@@ -1,0 +1,18 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Environment Variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Source Files
+scss/
+src/
+lib/
+js/main.js
+css/style.css
+# scripts/

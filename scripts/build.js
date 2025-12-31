@@ -1,6 +1,7 @@
 const esbuild = require('esbuild');
 const path = require('path');
 const fs = require('fs');
+require('dotenv').config();
 
 // Helper for recursive readdir
 function getFiles(dir, allFiles = []) {
@@ -79,16 +80,31 @@ async function runBuild() {
         const rootHtml = fs.readdirSync('.').filter(f => f.endsWith('.html')).map(f => f);
         const allHtml = [...new Set([...htmlFiles, ...rootHtml])];
 
+        const replacements = {
+            '{{PHONE_1}}': process.env.COMPANY_PHONE_1,
+            '{{PHONE_2}}': process.env.COMPANY_PHONE_2,
+            '{{WHATSAPP}}': process.env.COMPANY_WHATSAPP,
+            '{{WHATSAPP_LINK}}': process.env.COMPANY_WHATSAPP_LINK,
+            '{{EMAIL}}': process.env.COMPANY_EMAIL,
+            '{{ADDRESS}}': process.env.COMPANY_ADDRESS,
+        };
+
         for (const htmlFile of allHtml) {
             let content = fs.readFileSync(htmlFile, 'utf8');
 
             // Calculate depth correctly
-            // Normalize path to use forward slashes for depth calculation
             const normalizedPath = htmlFile.replace(/\\/g, '/');
             const depth = normalizedPath.split('/').length - 1;
             const prefix = depth > 0 ? '../'.repeat(depth) : '';
 
             console.log(`Processing ${htmlFile} (depth: ${depth}, prefix: ${prefix})...`);
+
+            // Apply replacements
+            for (const [key, value] of Object.entries(replacements)) {
+                if (value) {
+                    content = content.split(key).join(value);
+                }
+            }
 
             // CSS replacement: Match from Libraries Stylesheet start to Style Stylesheet end
             const cssRegex = /<!-- Libraries Stylesheet -->[\s\S]*?<link href="[^"]*?style\.css" rel="stylesheet">/i;
@@ -96,8 +112,6 @@ async function runBuild() {
 
             if (cssRegex.test(content)) {
                 content = content.replace(cssRegex, newCssTag);
-            } else {
-                console.warn(`Could not find CSS markers in ${htmlFile}`);
             }
 
             // JS replacement: Match from easing.min.js to main.js
@@ -106,8 +120,6 @@ async function runBuild() {
 
             if (jsRegex.test(content)) {
                 content = content.replace(jsRegex, newJsTag);
-            } else {
-                console.warn(`Could not find JS markers in ${htmlFile}`);
             }
 
             fs.writeFileSync(htmlFile, content);
