@@ -1,21 +1,33 @@
 (function ($) {
     "use strict";
-    
+
     // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
-                $('.navbar .dropdown').on('mouseover', function () {
-                    $('.dropdown-toggle', this).trigger('click');
-                }).on('mouseout', function () {
-                    $('.dropdown-toggle', this).trigger('click').blur();
+                $('.navbar .dropdown').on('mouseenter', function () {
+                    $(this).find('.dropdown-toggle').dropdown('show');
+                }).on('mouseleave', function () {
+                    $(this).find('.dropdown-toggle').dropdown('hide');
                 });
             } else {
-                $('.navbar .dropdown').off('mouseover').off('mouseout');
+                $('.navbar .dropdown').off('mouseenter').off('mouseleave');
             }
         }
         toggleNavbarMethod();
         $(window).resize(toggleNavbarMethod);
+
+        // Handle AJAX-loaded menu components
+        $(document).ajaxComplete(function (event, xhr, settings) {
+            if (settings.url.indexOf('menu') !== -1) {
+                // Re-initialize hover logic for desktop
+                toggleNavbarMethod();
+
+                // For mobile, Bootstrap handles it via data-bs-toggle.
+                // We just need to ensure the parent is closed when another opens if needed, 
+                // but usually Bootstrap's logic is sufficient.
+            }
+        });
     });
 
 
@@ -26,8 +38,8 @@
     $('.time').datetimepicker({
         format: 'LT'
     });
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -37,7 +49,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
 
@@ -65,6 +77,6 @@
         dots: false,
         loop: true,
     });
-    
+
 })(jQuery);
 

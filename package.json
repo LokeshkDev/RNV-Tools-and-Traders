@@ -16,6 +16,7 @@
   "type": "commonjs",
   "devDependencies": {
     "dotenv": "^17.2.3",
-    "esbuild": "^0.27.2"
+    "esbuild": "^0.27.2",
+    "sharp": "^0.34.5"
   }
 }

@@ -23,6 +23,8 @@ function getFiles(dir, allFiles = []) {
 }
 
 const jsFiles = [
+    'lib/jquery/jquery.min.js',
+    'lib/bootstrap/bootstrap.bundle.min.js',
     'lib/easing/easing.min.js',
     'lib/waypoints/waypoints.min.js',
     'lib/owlcarousel/owl.carousel.min.js',
@@ -63,8 +65,13 @@ async function runBuild() {
         const jsContent = [
             jsMask,
             ...jsFiles.map(f => {
-                console.log(`Adding ${f}...`);
-                return fs.readFileSync(f, 'utf8');
+                if (fs.existsSync(f)) {
+                    console.log(`Adding ${f}...`);
+                    return fs.readFileSync(f, 'utf8');
+                } else {
+                    console.warn(`Warning: ${f} not found!`);
+                    return '';
+                }
             })
         ].join('\n;\n');
 
@@ -106,16 +113,16 @@ async function runBuild() {
                 }
             }
 
-            // CSS replacement: Match from Libraries Stylesheet start to Style Stylesheet end
-            const cssRegex = /<!-- Libraries Stylesheet -->[\s\S]*?<link href="[^"]*?style\.css" rel="stylesheet">/i;
+            // CSS replacement: Match from Google Fonts start to Combined Stylesheet tag or style.css tag
+            const cssRegex = /(<!-- Google Web Fonts -->|<!-- Icon Font Stylesheet -->|<!-- Libraries Stylesheet -->)[\s\S]*?(<link href="[^"]*?style\.css" rel="stylesheet">|<link href="[^"]*?css\/min\.css" rel="stylesheet">)/i;
             const newCssTag = `<!-- Combined Stylesheet -->\n    <link href="${prefix}css/min.css" rel="stylesheet">`;
 
             if (cssRegex.test(content)) {
                 content = content.replace(cssRegex, newCssTag);
             }
 
-            // JS replacement: Match from easing.min.js to main.js
-            const jsRegex = /<script src="[^"]*?lib\/easing\/easing\.min\.js"><\/script>[\s\S]*?<script src="[^"]*?js\/main\.js"><\/script>/i;
+            // JS replacement: Match from jQuery CDN to main.js tag or min.js tag
+            const jsRegex = /(<script src="https:\/\/code\.jquery\.com\/jquery-3\.4\.1\.min\.js"><\/script>|<script src="[^"]*?lib\/easing\/easing\.min\.js"><\/script>|<script src="[^"]*?js\/min\.js"><\/script>)[\s\S]*?(<script src="[^"]*?js\/main\.js"><\/script>|<script src="[^"]*?js\/min\.js"><\/script>)/i;
             const newJsTag = `<script src="${prefix}js/min.js"></script>`;
 
             if (jsRegex.test(content)) {
