@@ -68,26 +68,30 @@
             </div>
             <div class="col-lg-6">
                 <div class="contact-form bg-light p-5">
-                    <div class="row g-3">
-                        <div class="col-12 col-sm-6">
-                            <input type="text" class="form-control border-0" placeholder="Your Name"
-                                style="height: 55px;">
+                    <form id="whatsappForm">
+                        <div class="row g-3">
+                            <div class="col-12 col-sm-6">
+                                <input type="text" id="wa_name" class="form-control border-0" placeholder="Your Name"
+                                    style="height: 55px;" required>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <input type="email" id="wa_email" class="form-control border-0" placeholder="Your Email"
+                                    style="height: 55px;" required>
+                            </div>
+                            <div class="col-12">
+                                <input type="text" id="wa_subject" class="form-control border-0" placeholder="Subject"
+                                    style="height: 55px;" required>
+                            </div>
+                            <div class="col-12">
+                                <textarea id="wa_message" class="form-control border-0" rows="4" placeholder="Message"
+                                    required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Send Message <i
+                                        class="bi bi-whatsapp"></i></button>
+                            </div>
                         </div>
-                        <div class="col-12 col-sm-6">
-                            <input type="email" class="form-control border-0" placeholder="Your Email"
-                                style="height: 55px;">
-                        </div>
-                        <div class="col-12">
-                            <input type="text" class="form-control border-0" placeholder="Subject"
-                                style="height: 55px;">
-                        </div>
-                        <div class="col-12">
-                            <textarea class="form-control border-0" rows="4" placeholder="Message"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -110,6 +114,24 @@
             $("#menu").load("menu.html");
             $("#topbar").load("topbar.html");
             $("#footer").load("footer.html");
+        });
+
+        document.getElementById('whatsappForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var name = document.getElementById('wa_name').value;
+            var email = document.getElementById('wa_email').value;
+            var subject = document.getElementById('wa_subject').value;
+            var message = document.getElementById('wa_message').value;
+
+            var whatsappMessage = "*New Inquiry from Website*%0A%0A" +
+                "*Name:* " + name + "%0A" +
+                "*Email:* " + email + "%0A" +
+                "*Subject:* " + subject + "%0A" +
+                "*Message:* " + message;
+
+            var whatsappUrl = "https://wa.me/917845053826?text=" + whatsappMessage;
+            window.open(whatsappUrl, '_blank');
         });
     </script>
 </body>

@@ -1,6 +1,10 @@
 # 404 Error Redirection
 ErrorDocument 404 /404.html
 
+# 301 Redirections
+# Redirect 301 /old-page.html /new-page.html
+# RedirectMatch 301 ^/old-directory/(.*)$ /new-directory/$1
+
 <IfModule mod_expires.c>
     ExpiresActive On
     
